@@ -82,10 +82,9 @@ if ($rol == 2) { // Profesor
 } else { // Alumno
 
     // Datos del gráfico
-    $data1y = [6.5,7.2,8.1,5.9,9.0,7.5,8.3,6.8,7.9,8.5,7.1,9.2];
-    $data2y = [5.8,6.7,7.4,6.2,8.1,7.0,6.9,7.5,8.0,7.8,7.3,8.4];
-    $data3y = [7.0,8.0,8.5,7.8,9.3,8.7,9.0,8.4,9.2,9.5,8.6,9.1];
-
+    $data1y = [6.5,7.2,8.1,5.9,9.0];
+    $data2y = [5.8,6.7,7.4,6.2,8.1];
+    $data3y = [7.0,8.0,8.5,7.8,9.3];
 
 
     // Crear el gráfico
@@ -101,7 +100,7 @@ if ($rol == 2) { // Profesor
 
     $graph->SetBox(false);
     $graph->ygrid->SetFill(false);
-    $graph->xaxis->SetTickLabels(['ENERO','FEBRERO','MARZO','ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE']);
+    $graph->xaxis->SetTickLabels(['2021','2022','2023','2024', '2025']);
     $graph->yaxis->HideLine(false);
     $graph->yaxis->HideTicks(false,false);
 
@@ -126,12 +125,24 @@ if ($rol == 2) { // Profesor
     // ------------------------------
     // Guardar el gráfico como imagen
     // ------------------------------
-    $dir = '../../assets/img/graficos/';
+    $dir = './../assets/img/graficos/';
     if (!is_dir($dir)) {
-        mkdir($dir, 0755, true); // crea las carpetas necesarias
+    if (!mkdir($dir, 0777, true)) {
+        die("No se pudo crear la carpeta: $dir");
     }
+}else{
+    // Nombre base de la imagen
+    $baseName = 'graficoAlumno';
+    $extension = '.png';
+    $rutaImagen = $dir . $baseName . $extension;
 
-    $rutaImagen = $dir . 'grafico_alumno.png';
+    // Verificar si el archivo ya existe y renombrar si es necesario
+    $counter = 1;
+    while (file_exists($rutaImagen)) {
+    $rutaImagen = $dir . $baseName . '_' . $counter . $extension;
+    $counter++;
+   }
+}
 
     // Guardar el gráfico como archivo PNG
     $graph->Stroke($rutaImagen);
