@@ -1,5 +1,5 @@
 <?php
-require_once '../MODELO/encriptador.php';
+
 class abmProfesor {
 
     public function listar($condicion = "") {

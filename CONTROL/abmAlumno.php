@@ -1,4 +1,5 @@
 <?php
+
 class abmAlumno {
 
     // Listar todos los alumnos o con condición
