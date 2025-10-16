@@ -34,6 +34,7 @@ class ComposerStaticInitdfabe774bbbe86d7ea2d09b36c1daed0
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'mitoteam\\jpgraph\\MtJpGraph' => __DIR__ . '/..' . '/mitoteam/jpgraph/src/MtJpGraph.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

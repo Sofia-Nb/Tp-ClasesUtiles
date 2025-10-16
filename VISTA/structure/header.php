@@ -23,5 +23,3 @@ include_once(__DIR__ . '../../../configuracion.php');
             <hr>
         </nav>
     </header>
-</body>
-</html>
