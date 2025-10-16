@@ -1,5 +1,4 @@
-<?php
-
+<?
 class abmProfesor {
 
     public function listar($condicion = "") {
