@@ -4,8 +4,63 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "dfabe774bbbe86d7ea2d09b36c1daed0",
+    "content-hash": "02cab9351c7d69879c96b4f00d225d20",
     "packages": [
+        {
+            "name": "mitoteam/jpgraph",
+            "version": "10.5.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mitoteam/jpgraph.git",
+                "reference": "62f31c43933ff1419e59e68df8e04cd25de93131"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mitoteam/jpgraph/zipball/62f31c43933ff1419e59e68df8e04cd25de93131",
+                "reference": "62f31c43933ff1419e59e68df8e04cd25de93131",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5"
+            },
+            "replace": {
+                "jpgraph/jpgraph": "4.0.2",
+                "rulin132/jpgraph": "4.3.5"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/MtJpGraph.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "QPL-1.0"
+            ],
+            "authors": [
+                {
+                    "name": "JpGraph team",
+                    "homepage": "https://jpgraph.net",
+                    "role": "Original Library Developers"
+                },
+                {
+                    "name": "MiTo Team",
+                    "email": "info@mito-team.com",
+                    "homepage": "https://www.mito-team.com",
+                    "role": "Composer package maintenance, PHP-compatibility patches"
+                }
+            ],
+            "description": "JpGraph library composer package with PHP 8.5 support",
+            "homepage": "https://github.com/mitoteam/jpgraph",
+            "keywords": [
+                "jpgraph"
+            ],
+            "support": {
+                "issues": "https://github.com/mitoteam/jpgraph/issues",
+                "source": "https://github.com/mitoteam/jpgraph/tree/10.5.1"
+            },
+            "time": "2025-10-14T07:03:12+00:00"
+        },
         {
             "name": "paragonie/constant_time_encoding",
             "version": "v3.1.3",

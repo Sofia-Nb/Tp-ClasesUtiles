@@ -1,6 +1,11 @@
 <?php
-include_once '../structure/header.php';
-require '../../vendor/autoload.php';
+include_once ('../structure/header.php');
+require ('../../vendor/autoload.php');
+require_once ('../../vendor/mitoteam/jpgraph/src/lib/jpgraph.php');
+require_once ('../../vendor/mitoteam/jpgraph/src/lib/jpgraph_bar.php');
+require_once ('../../vendor/mitoteam/jpgraph/src/lib/jpgraph_line.php'); // si usas líneas
+require_once ('../../vendor/mitoteam/jpgraph/src/lib/jpgraph_utils.inc.php'); // según necesidad
+
 
 $datos = datasubmitted();
 $objAbmProfesor = new abmProfesor();
@@ -8,11 +13,11 @@ $objAbmAlumno = new abmAlumno();
 $rol = (int) $datos['nombreRol'];
 
 
-if ($rol === 2){
+/*if ($rol === 2){
     $permiso = true;
 }else{
     $permiso = false;
-}
+}*/
 
 // ----------------------------------------------------------------
 
@@ -26,7 +31,7 @@ use phpseclib3\Crypt\AES;
 $clave = 'clave12345678910'; // AES-128
 $iv    = 'ivclave123456789'; // IV de 16 bytes
 
-if ($permiso) { // Profesor
+if ($rol == 2) { // Profesor
     $alumnos = $objAbmAlumno->buscarPorRol(1);
 
     // Construir la tabla HTML
@@ -75,5 +80,65 @@ if ($permiso) { // Profesor
 
     echo $htmlDescifrado;
 } else { // Alumno
-        echo '<p>No tiene permiso para ver esta información.</p>';
+
+    // Datos del gráfico
+    $data1y = [6.5,7.2,8.1,5.9,9.0,7.5,8.3,6.8,7.9,8.5,7.1,9.2];
+    $data2y = [5.8,6.7,7.4,6.2,8.1,7.0,6.9,7.5,8.0,7.8,7.3,8.4];
+    $data3y = [7.0,8.0,8.5,7.8,9.3,8.7,9.0,8.4,9.2,9.5,8.6,9.1];
+
+
+
+    // Crear el gráfico
+    $graph = new Graph(1200,600,'auto');
+    $graph->SetScale("textlin");
+
+    $theme_class = new UniversalTheme;
+    $graph->SetTheme($theme_class);
+
+    // Escala de notas (de 0 a 10)
+    $graph->yaxis->SetTickPositions([0,2,4,6,8,10]); 
+    $graph->SetScale("textlin", 0, 10); // Escala lineal de 0 a 10
+
+    $graph->SetBox(false);
+    $graph->ygrid->SetFill(false);
+    $graph->xaxis->SetTickLabels(['ENERO','FEBRERO','MARZO','ABRIL', 'MAYO', 'JUNIO', 'JULIO', 'AGOSTO', 'SEPTIEMBRE', 'OCTUBRE', 'NOVIEMBRE', 'DICIEMBRE']);
+    $graph->yaxis->HideLine(false);
+    $graph->yaxis->HideTicks(false,false);
+
+    // Crear barras
+    $b1plot = new BarPlot($data1y);
+    $b2plot = new BarPlot($data2y);
+    $b3plot = new BarPlot($data3y);
+
+    $b1plot->SetColor("white");
+    $b1plot->SetFillColor("#cc1111");
+
+    $b2plot->SetColor("white");
+    $b2plot->SetFillColor("#11cccc");
+
+    $b3plot->SetColor("white");
+    $b3plot->SetFillColor("#1111cc");
+
+    $gbplot = new GroupBarPlot([$b1plot, $b2plot, $b3plot]);
+    $graph->Add($gbplot);
+    $graph->title->Set("Bar Plots");
+
+    // ------------------------------
+    // Guardar el gráfico como imagen
+    // ------------------------------
+    $dir = '../../assets/img/graficos/';
+    if (!is_dir($dir)) {
+        mkdir($dir, 0755, true); // crea las carpetas necesarias
+    }
+
+    $rutaImagen = $dir . 'grafico_alumno.png';
+
+    // Guardar el gráfico como archivo PNG
+    $graph->Stroke($rutaImagen);
+
+    // Mostrar el gráfico en la página, sin ocupar toda la pantalla
+    echo '<div style="text-align:center; margin-top:20px;">';
+    echo '<h4>Gráfico de Alumno</h4>';
+    echo '<img src="' . $rutaImagen . '" alt="Gráfico de Alumno" style="width: 70%; max-width: 900px; border-radius:10px;">';
+    echo '</div>';
 }

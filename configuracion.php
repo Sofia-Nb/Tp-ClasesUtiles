@@ -17,4 +17,5 @@ $_SESSION['ROOT'] = $GLOBALS['ROOT'];
 
 // Incluí las funciones (autoload)
 include_once($GLOBALS['ROOT'] . 'UTILS/funciones.php');
+
 ?>
