@@ -26,29 +26,54 @@ use phpseclib3\Crypt\AES;
 $clave = 'clave12345678910'; // AES-128
 $iv    = 'ivclave123456789'; // IV de 16 bytes
 
-// Cifrar
-$aes = new AES('cbc');
-$aes->setKey($clave);
-$aes->setIV($iv);
-
 if ($permiso) { // Profesor
-    $alumnos = $objAbmAlumno->buscarPorRol(1); // suponiendo 1 = alumno
+    $alumnos = $objAbmAlumno->buscarPorRol(1);
+
+    // Construir la tabla HTML
+    $htmlTabla = '<table class="table">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>';
+
     foreach ($alumnos as $alumno) {
-        $textoPlano = "<h2>Datos del alumno</h2>
-                       <p>Nombre: {$alumno['nombre']}</p>
-                       <p>Email: {$alumno['email']}</p>";
-        $textoCifrado = base64_encode($aes->encrypt($textoPlano));
-        echo $aes2->decrypt(base64_decode($textoCifrado));
+        $htmlTabla .= '<tr>
+            <td>' . htmlspecialchars($alumno->getNombre()) . '</td>
+            <td>' . htmlspecialchars($alumno->getEmail()) . '</td>
+            <td>
+                <form style="display:inline;">
+                    <input type="hidden" name="id_alumno" value="' . $alumno->getDni() . '">
+                    <button type="submit" class="btn btn-warning">Encriptar</button>
+                </form>
+                <form style="display:inline;">
+                    <input type="hidden" name="id_alumno" value="' . $alumno->getDni() . '">
+                    <button type="submit" class="btn btn-success">Desencriptar</button>
+                </form>
+            </td>
+        </tr>';
     }
+
+    $htmlTabla .= '</tbody></table>'; // <-- cierre de tabla fuera del foreach
+
+    // Crear objeto AES
+    $aes = new AES('cbc');
+    $aes->setKey($clave);
+    $aes->setIV($iv);
+
+    // Cifrar y descifrar
+    $textoCifrado = base64_encode($aes->encrypt($htmlTabla));
+
+    $aes2 = new AES('cbc');
+    $aes2->setKey($clave);
+    $aes2->setIV($iv);
+
+    $htmlDescifrado = $aes2->decrypt(base64_decode($textoCifrado));
+
+    echo $htmlDescifrado;
 } else { // Alumno
-    $alumno = $objAbmAlumno->buscarPorRol($rol);
-    if ($alumno) {
-        $textoPlano = "<h2>Tu información</h2>
-                       <p>Nombre: {$alumno['nombre']}</p>
-                       <p>Email: {$alumno['email']}</p>";
-        $textoCifrado = base64_encode($aes->encrypt($textoPlano));
-        echo $aes2->decrypt(base64_decode($textoCifrado));
-    } else {
         echo '<p>No tiene permiso para ver esta información.</p>';
-    }
 }
