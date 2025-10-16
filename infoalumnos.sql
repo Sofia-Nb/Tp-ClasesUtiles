@@ -110,6 +110,26 @@ INSERT INTO `rol` (`idRol`, `nombreRol`) VALUES
 (2, 'Profesor');
 
 --
+-- Estructura de tabla para la tabla `nota`
+--
+
+CREATE TABLE `nota` (
+  `idNota` int(11) NOT NULL,
+  `idAlumno` varchar(50) NOT NULL,
+  `nota` int NOT NULL,
+  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `nota`
+--
+
+INSERT INTO `nota` (`idNota`, `idAlumno`, `nota`, `fecha`) VALUES
+(1, 'Alumno'),
+(2, 'Profesor');
+
+
+--
 -- Índices para tablas volcadas
 --
 
