@@ -27,187 +27,66 @@ SET time_zone = "+00:00";
 -- Estructura de tabla para la tabla `alumno`
 --
 
-CREATE TABLE `alumno` (
-  `idAlumno` int(11) NOT NULL,
-  `nombre` varchar(50) NOT NULL,
-  `apellido` varchar(50) NOT NULL,
-  `dni` varchar(15) DEFAULT NULL,
-  `fechaNacimiento` date DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `idRol` int(11) NOT NULL DEFAULT 1
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+-- 1. Tabla Padre: USUARIO
+-- Contiene todos los atributos comunes.
+CREATE TABLE usuario (
+    idUsuario INT AUTO_INCREMENT PRIMARY KEY,
+    dni VARCHAR(10) NOT NULL UNIQUE,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    nombre VARCHAR(100) NOT NULL,
+    apellido VARCHAR(100) NOT NULL,
+    contrasenia VARCHAR(255) NOT NULL, -- Importante: Guardar siempre un HASH, no texto plano.
+    rol ENUM('alumno', 'profe', 'admin') NOT NULL -- El rol nos ayuda a saber qué tabla hija buscar.
+);
 
---
--- Volcado de datos para la tabla `alumno`
---
+-- 2. Subclase: ALUMNO
+-- Contiene solo sus atributos específicos.
+-- El 'idUsuario' es al mismo tiempo Llave Primaria (PK) y Llave Foránea (FK).
+CREATE TABLE alumno (
+    idUsuario INT PRIMARY KEY,
+    legajo VARCHAR(50) NOT NULL UNIQUE,
+    FOREIGN KEY (idUsuario) 
+        REFERENCES usuario(idUsuario) 
+        ON DELETE CASCADE, 
+        ON UPDATE CASCADE
+);
 
-INSERT INTO `alumno` (`idAlumno`, `nombre`, `apellido`, `dni`, `fechaNacimiento`, `email`, `telefono`, `idRol`) VALUES
-(1, 'Maria', 'Lopez', '12334355', '1875-06-23', 'maria@gmail.com', '299-5234465', 1),
-(2, 'Natalia', 'Gomez', '28326986', '1975-06-21', 'natalia@gmail.com', '299-6543215', 1);
+-- 3. Subclase: PROFE
+-- Contiene solo sus atributos específicos.
+-- El 'idUsuario' es también PK y FK.
+CREATE TABLE profe (
+    idUsuario INT PRIMARY KEY,
+    nombreMateria VARCHAR(150),
+    FOREIGN KEY (idUsuario) 
+        REFERENCES usuario(idUsuario) 
+        ON DELETE CASCADE , 
+        ON UPDATE CASCADE
+);
 
--- --------------------------------------------------------
+-- 4. Tabla NOTA
+-- Esta tabla conecta a un alumno con un profesor a través de una nota.
+CREATE TABLE nota (
+    idNota INT AUTO_INCREMENT PRIMARY KEY,
+    valor DECIMAL(4, 2) NOT NULL, -- Ej: 9.50 o 10.00
+    fecha DATETIME NOT NULL,
+    
+    -- Relación (1:M) "tiene" con Alumno
+    idAlumno_FK INT NOT NULL,
+    
+    -- Relación (1:M) "carga" con Profe
+    idProfe_FK INT, -- Puede ser NULL si el profe es borrado
 
---
--- Estructura de tabla para la tabla `permisos`
---
+    -- Definición de las llaves foráneas
+    FOREIGN KEY (idAlumno_FK) 
+        REFERENCES alumno(idUsuario)
+        ON DELETE CASCADE, , 
+        ON UPDATE CASCADE
 
-CREATE TABLE `permisos` (
-  `idAlumno` int(11) NOT NULL,
-  `permitido` tinyint(1) DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `permisos`
---
-
-INSERT INTO `permisos` (`idAlumno`, `permitido`) VALUES
-(1, 1),
-(2, 0);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `profesor`
---
-
-CREATE TABLE `profesor` (
-  `idProfesor` int(11) NOT NULL,
-  `nombre` varchar(50) NOT NULL,
-  `apellido` varchar(50) NOT NULL,
-  `dni` varchar(15) DEFAULT NULL,
-  `especialidad` varchar(100) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `telefono` varchar(20) DEFAULT NULL,
-  `idRol` int(11) NOT NULL DEFAULT 2
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `profesor`
---
-
-INSERT INTO `profesor` (`idProfesor`, `nombre`, `apellido`, `dni`, `especialidad`, `email`, `telefono`, `idRol`) VALUES
-(1, 'Pedro', 'Perez', '20123456', 'Matemática', 'pedro@gmail.com', '299-1234567', 2),
-(2, 'Laura', 'Martinez', '30234567', 'Física', 'laura@gmail.com', '299-7654321', 2);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `rol`
---
-
-CREATE TABLE `rol` (
-  `idRol` int(11) NOT NULL,
-  `nombreRol` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `rol`
---
-
-INSERT INTO `rol` (`idRol`, `nombreRol`) VALUES
-(1, 'Alumno'),
-(2, 'Profesor');
-
---
--- Estructura de tabla para la tabla `nota`
---
-
-CREATE TABLE `nota` (
-  `idNota` int(11) NOT NULL,
-  `idAlumno` varchar(50) NOT NULL,
-  `nota` int NOT NULL,
-  `fecha` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `nota`
---
-
-INSERT INTO `nota` (`idNota`, `idAlumno`, `nota`, `fecha`) VALUES
-(1, 'Alumno'),
-(2, 'Profesor');
-
-
---
--- Índices para tablas volcadas
---
-
---
--- Indices de la tabla `alumno`
---
-ALTER TABLE `alumno`
-  ADD PRIMARY KEY (`idAlumno`),
-  ADD UNIQUE KEY `dni` (`dni`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD KEY `idRol` (`idRol`);
-
---
--- Indices de la tabla `permisos`
---
-ALTER TABLE `permisos`
-  ADD KEY `idAlumno` (`idAlumno`);
-
---
--- Indices de la tabla `profesor`
---
-ALTER TABLE `profesor`
-  ADD PRIMARY KEY (`idProfesor`),
-  ADD UNIQUE KEY `email` (`email`),
-  ADD UNIQUE KEY `dni` (`dni`) USING BTREE,
-  ADD KEY `idRol` (`idRol`);
-
---
--- Indices de la tabla `rol`
---
-ALTER TABLE `rol`
-  ADD PRIMARY KEY (`idRol`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
---
-
---
--- AUTO_INCREMENT de la tabla `alumno`
---
-ALTER TABLE `alumno`
-  MODIFY `idAlumno` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `profesor`
---
-ALTER TABLE `profesor`
-  MODIFY `idProfesor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- AUTO_INCREMENT de la tabla `rol`
---
-ALTER TABLE `rol`
-  MODIFY `idRol` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
-
---
--- Restricciones para tablas volcadas
---
-
---
--- Filtros para la tabla `alumno`
---
-ALTER TABLE `alumno`
-  ADD CONSTRAINT `alumno_ibfk_1` FOREIGN KEY (`idRol`) REFERENCES `rol` (`idRol`);
-
---
--- Filtros para la tabla `permisos`
---
-ALTER TABLE `permisos`
-  ADD CONSTRAINT `permisos_ibfk_1` FOREIGN KEY (`idAlumno`) REFERENCES `alumno` (`idAlumno`) ON DELETE CASCADE;
-
---
--- Filtros para la tabla `profesor`
---
-ALTER TABLE `profesor`
-  ADD CONSTRAINT `profesor_ibfk_1` FOREIGN KEY (`idRol`) REFERENCES `rol` (`idRol`);
-COMMIT;
-
+    FOREIGN KEY (idProfe_FK) 
+        REFERENCES profe(idUsuario)
+        ON DELETE SET NULL , 
+        ON UPDATE CASCADE
+);
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

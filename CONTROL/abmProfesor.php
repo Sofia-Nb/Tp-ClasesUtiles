@@ -6,11 +6,6 @@ class abmProfesor {
         return $profesor->listar($condicion);
     }
 
-    public function buscarPorRol($rol) {
-        $profesor = new Profesor();
-        return $profesor->buscarPorRol($rol);
-    }
-
     public function encriptarNotas($idAlumno, $nota) {
         $encriptador = new Encriptador ("1234567890abcdefghijklmnopqrstuv");
         $notaEncriptada = $encriptador->encriptar($nota);

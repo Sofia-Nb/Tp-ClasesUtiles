@@ -8,12 +8,7 @@ class abmAlumno {
         return $alumno->listar($condicion);
     }
 
-    // Buscar alumno por Rol
-    public function buscarPorRol($rol) {
-        $profesor = new Alumno();
-        return $profesor->buscarPorRol($rol);
-    }
-
+   
     public function DecsencriptarNotas($idNota, $idAlumno) {
         $encriptador = new Encriptador ("1234567890abcdefghijklmnopqrstuv");
         $base = new BaseDatos();
