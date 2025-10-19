@@ -3,11 +3,11 @@
 <div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
     <div class="card shadow-sm" style="width: 450px;">
         <div class="card-body">
-            <h3 class="text-center mb-4">Registrarse</h3>
+            <h3 class="text-center mb-4" id="tituloFormulario">Registrarse</h3>
 
-            <form id="registroForm" action="../CONTROL/registrarUsuario.php" method="POST">
+            <form id="registroForm" action="action/actionRegistro.php" method="POST">
                 
-                <p class="mb-2">Marque el tipo de usuario que desea</p>
+                <p class="mb-2">Seleccione el tipo de usuario:</p>
                 
                 <div class="form-check">
                     <input class="form-check-input" type="radio" name="tipoUsuario" id="radioAlumno" value="alumno" checked>
@@ -29,7 +29,7 @@
                     <input type="text" class="form-control" name="apellido" placeholder="Ingrese su apellido" required>
                 </div>
                 <div class="mb-3">
-                    <input type="email" class="form-control" name="email" placeholder="Ingrese el email" required>
+                    <input type="email" class="form-control" name="email" placeholder="Ingrese su email" required>
                 </div>
                 <div class="mb-3">
                     <input type="text" class="form-control" name="dni" placeholder="Ingrese su número de documento" required>
@@ -38,10 +38,9 @@
                     <input type="password" class="form-control" name="contrasenia" placeholder="Ingrese una contraseña" required>
                 </div>
 
-
                 <div id="camposAlumno">
                     <div class="mb-3">
-                        <input type="text" class="form-control" name="legajo" id="inputLegajo" placeholder="Ingrese su legajo" required>
+                        <input type="text" class="form-control" name="legajo" id="inputLegajo" placeholder="Ingrese su legajo">
                     </div>
                 </div>
 
@@ -56,6 +55,7 @@
         </div>
     </div>
 </div>
-<script src="js/formularioRegistro.js"></script>
+
+<script src="js/registro.js"></script>
 
 <?php include_once 'structure/footer.php'; ?>

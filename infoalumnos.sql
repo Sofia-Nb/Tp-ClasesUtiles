@@ -35,8 +35,8 @@ CREATE TABLE usuario (
     email VARCHAR(255) NOT NULL UNIQUE,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
-    contrasenia VARCHAR(255) NOT NULL, -- Importante: Guardar siempre un HASH, no texto plano.
-    rol ENUM('alumno', 'profe', 'admin') NOT NULL -- El rol nos ayuda a saber qué tabla hija buscar.
+    contrasenia VARCHAR(255) NOT NULL,
+    rol ENUM('alumno', 'profe', 'admin') NOT NULL
 );
 
 -- 2. Subclase: ALUMNO
@@ -47,7 +47,7 @@ CREATE TABLE alumno (
     legajo VARCHAR(50) NOT NULL UNIQUE,
     FOREIGN KEY (idUsuario) 
         REFERENCES usuario(idUsuario) 
-        ON DELETE CASCADE, 
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );
 
@@ -59,32 +59,37 @@ CREATE TABLE profe (
     nombreMateria VARCHAR(150),
     FOREIGN KEY (idUsuario) 
         REFERENCES usuario(idUsuario) 
-        ON DELETE CASCADE , 
+        ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+CREATE TABLE peticion(
+  idUsuario int(11) NOT NULL,
+  nombre varchar(50) NOT NULL,
+  apellido varchar(50) NOT NULL,
+  dni varchar(15) NOT NULL,
+  email varchar(100) NOT NULL,
+  rol varchar(20) NOT NULL,
+  nombreMateria varchar(20) NULL,
+  legajo int NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- 4. Tabla NOTA
 -- Esta tabla conecta a un alumno con un profesor a través de una nota.
 CREATE TABLE nota (
     idNota INT AUTO_INCREMENT PRIMARY KEY,
-    valor DECIMAL(4, 2) NOT NULL, -- Ej: 9.50 o 10.00
+    valor DECIMAL(4, 2) NOT NULL,
     fecha DATETIME NOT NULL,
-    
-    -- Relación (1:M) "tiene" con Alumno
     idAlumno_FK INT NOT NULL,
-    
-    -- Relación (1:M) "carga" con Profe
-    idProfe_FK INT, -- Puede ser NULL si el profe es borrado
-
-    -- Definición de las llaves foráneas
+    idProfe_FK INT,
     FOREIGN KEY (idAlumno_FK) 
         REFERENCES alumno(idUsuario)
-        ON DELETE CASCADE, , 
-        ON UPDATE CASCADE
-
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+        
     FOREIGN KEY (idProfe_FK) 
         REFERENCES profe(idUsuario)
-        ON DELETE SET NULL , 
+        ON DELETE SET NULL
         ON UPDATE CASCADE
 );
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

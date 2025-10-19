@@ -1,8 +1,6 @@
 <?php
 
-
-class Hasher
-{
+class Hasher{
     private $options;
 
     public function __construct()

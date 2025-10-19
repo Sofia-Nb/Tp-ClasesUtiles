@@ -15,7 +15,7 @@ include_once './structure/header.php';
         <div class="card shadow-sm" style="width: 400px;">
             <div class="card-body">
                 <h3 class="text-center mb-4">Iniciar Sesión</h3>
-                <form name="loginForm" id="loginForm" method="POST" action="../CONTROL/verificarLogin.php">
+                <form name="loginForm" id="loginForm" method="POST" action="action/actionLogin.php">
                     <div class="form-group">
                         <label for="email"></label>
                         <input type="email" id="email" class="form-control" placeholder="Ingrese el email" name="emailLogin" required>
