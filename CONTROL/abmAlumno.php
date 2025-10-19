@@ -12,17 +12,15 @@ class abmAlumno {
     public function DecsencriptarNotas($idNota, $idAlumno) {
         $encriptador = new Encriptador ("1234567890abcdefghijklmnopqrstuv");
         $base = new BaseDatos();
-        $sql = "SELECT nota FROM notas WHERE idAlumno = '$idAlumno'";
-        $cant = $base->Ejecutar($sql);
-        $notasDesencriptadas = [];
+        $sql = "SELECT nota FROM nota WHERE idAlumno_FK  = ':idAlumno'";
+        $stmt = $base->prepare($sql);
+        $stmt->execute(['idAlumno' => $idAlumno]);
 
-        if ($cant > 0) {
-            while ($fila = $base->Registro()) {
+        $notasDesencriptadas = [];
+            while ($fila = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 $notaDesencriptada = $encriptador->desencriptar($fila['nota']);
                 $notasDesencriptadas[] = $notaDesencriptada;
             }
-        }
         return $notasDesencriptadas;
     }
-
 }
