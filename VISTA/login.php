@@ -18,11 +18,11 @@ include_once './structure/header.php';
                 <form name="loginForm" id="loginForm" method="POST" action="action/actionLogin.php">
                     <div class="form-group">
                         <label for="email"></label>
-                        <input type="email" id="email" class="form-control" placeholder="Ingrese el email" name="emailLogin" required>
+                        <input type="email" id="email" class="form-control" placeholder="Ingrese el email" name="email" required>
                     </div>
                     <div class="form-group">
                         <label for="password"></label>
-                        <input type="password" id="contrasenia" class="form-control" placeholder="Ingrese la contraseña" name="contrasenialogin" required>
+                        <input type="password" id="contrasenia" class="form-control" placeholder="Ingrese la contraseña" name="contrasenia" required>
                     </div>
                     <button type="submit" id="loginButton" class="btn btn-primary btn-block mt-4">Iniciar Sesión</button>
                 </form>
