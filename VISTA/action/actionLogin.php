@@ -1,9 +1,8 @@
 <?php
 include_once './structure/header.php';
-
-$email = $datos['emailLogin'];
-$contra = $datos['contrasenialogin'];
-$usuario = buscarUsuario($email, $contra);
+$datos = datasubmitted();
+$objUsuario = new Usuario();
+$usuario = $objUsuario->buscarUsuario($datos);
 if ($usuario) {
     if ($usuario['rol'] == 'alumno') {
         //view para alumno
