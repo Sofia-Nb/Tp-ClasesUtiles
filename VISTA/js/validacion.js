@@ -21,6 +21,17 @@ $(document).ready(function () {
                 required: "Ingrese un email",
                 email: "Ingrese un email valido"
             }
+        },
+        errorElement: 'div',
+        errorClass: 'text-danger mt-1',
+        highlight: function (element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('is-invalid');
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element); 
         }
     })
     $("#registroForm").validate({
@@ -58,6 +69,17 @@ $(document).ready(function () {
                 maxlength: "Ingrese Maximo 9 caracteres",
                 min: "debe ser un numero positivo"
             }
+        },
+        errorElement: 'div',
+        errorClass: 'text-danger mt-1',
+        highlight: function (element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('is-invalid');
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element); 
         }
     })
 });

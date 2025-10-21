@@ -8,7 +8,6 @@ class abmAlumno {
         return $alumno->listar($condicion);
     }
 
-   
     public function DecsencriptarNotas($idNota, $idAlumno) {
         $encriptador = new Encriptador ("1234567890abcdefghijklmnopqrstuv");
         $base = new BaseDatos();

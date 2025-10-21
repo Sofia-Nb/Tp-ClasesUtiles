@@ -1,5 +1,5 @@
 <?php
-require 'vendor/autoload.php'; //invoco el autoload de composer para cargar las librerias
+require_once __DIR__ . '/../vendor/autoload.php'; //invoco el autoload de composer para cargar las librerias
 
 use phpseclib3\Crypt\AES;
 

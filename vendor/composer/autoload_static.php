@@ -7,6 +7,7 @@ namespace Composer\Autoload;
 class ComposerStaticInitdfabe774bbbe86d7ea2d09b36c1daed0
 {
     public static $files = array (
+        '5255c38a0faeba867671b61dfda6d864' => __DIR__ . '/..' . '/paragonie/random_compat/lib/random.php',
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
     );
 

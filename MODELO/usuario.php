@@ -92,27 +92,37 @@ class Usuario {
     }
 
     public function buscarUsuario($datos){
-    $email = $datos['email'];
-    $contra = $datos['contrasenia'];
-    $res = false;
+        $email = $datos['email'];
+        $contra = $datos['contrasenia'];
+        $res = false;
 
-    $baseDatos = new BaseDatos();
-    $hash = new Hasher();
+        $baseDatos = new BaseDatos();
+        $hash = new Hasher();
 
-    // Consulta segura usando prepared statement
-    $sql = "SELECT * FROM usuario WHERE email = :email";
-    $stmt = $baseDatos->prepare($sql);
-    $stmt->execute([':email' => $email]);
+        $sql = "SELECT * FROM usuario WHERE email = :email";
+        $stmt = $baseDatos->prepare($sql);
+        $stmt->execute([':email' => $email]);
 
-    $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Si se encontró un usuario y la contraseña coincide
-    if ($usuario && $hash->verify($contra, $usuario["contrasenia"])) {
-        $res = $usuario;
+        if ($usuario && $hash->verify($contra, $usuario["contrasenia"])) {
+            $res = $usuario;
+        }
+        return $res;
     }
 
-    return $res;
-}
+    public function buscarId($dni) {
+        $baseDatos = new BaseDatos();
+        $res = false;
+        $sql = "SELECT idUsuario FROM usuario WHERE dni = :dni";
+        $stmt = $baseDatos->prepare($sql);
+        $stmt->execute([':dni' => $dni]);
+        $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
+        if ($usuario) {
+            $res = $usuario['idUsuario'];
+        }
+        return $res;
+    }
 
 }
 ?>
