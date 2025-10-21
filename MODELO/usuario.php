@@ -52,39 +52,40 @@ class Usuario {
         $this->contrasenia = $nuevoHash;
     }
 
-    public function agregarUsuario($dni, $email, $nombre, $apellido, $contrasenia, $rol, $legajo = null, $nombreMateria = null){
+    public function agregarUsuario($datos){
     // hashear la contraseña
+    $contrasenia = $datos['contrasenia'];
     $hash = new Hasher();
     $contraseniaHasheada = $hash->hash($contrasenia);
     $baseDatos = new BaseDatos();
     // insertar usuario
     $sql = "INSERT INTO usuario (dni, email, nombre, apellido, contrasenia, rol) 
-    VALUES (:dni, :email, :nombre, :apellido, :contrasenia, :rol)";
+    VALUES (:dni, :email, :nombre, :apellido, :contrasenia, :tipoUsuario)";
     $stmt = $baseDatos->prepare($sql);
     $stmt->execute([
-        ':dni' => $dni,
-        ':email' => $email,
-        ':nombre' => $nombre,
-        ':apellido' => $apellido,
+        ':dni' => $datos['dni'],
+        ':email' => $datos['email'],
+        ':nombre' => $datos['nombre'],
+        ':apellido' => $datos['apellido'],
         ':contrasenia' => $contraseniaHasheada,
-        ':rol' => $rol
+        ':tipoUsuario' => $datos['tipoUsuario']
     ]);
 
     $idUsuario = $baseDatos->lastInsertId();
 
-    if ($rol === 'alumno' && $legajo !== null) {
+    if ($datos['tipoUsuario'] === 'alumno' && $datos['legajo'] !== null) {
         $sqlAlumno = "INSERT INTO alumno (idUsuario, legajo) VALUES (:idUsuario, :legajo)";
         $stmtAlumno = $baseDatos->prepare($sqlAlumno);
         $stmtAlumno->execute([
             ':idUsuario' => $idUsuario,
-            ':legajo' => $legajo
+            ':legajo' => $datos['legajo']
         ]);
-    } elseif ($rol === 'profe' && $nombreMateria !== null) {
+    } elseif ($datos['tipoUsuario'] === 'profe' && $datos['nombreMateria'] !== null) {
         $sqlProfe = "INSERT INTO profe (idUsuario, nombreMateria) VALUES (:idUsuario, :nombreMateria)";
         $stmtProfe = $baseDatos->prepare($sqlProfe);
         $stmtProfe->execute([
             ':idUsuario' => $idUsuario,
-            ':nombreMateria' => $nombreMateria
+            ':nombreMateria' => $datos['nombreMateria']
         ]);
     }
 
