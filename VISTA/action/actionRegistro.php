@@ -23,7 +23,7 @@ if ($resultado) {
             <?= $mensaje ?>
         </div>
         <div class="text-center mt-4">
-            <a href="login.php" class="btn btn-primary btn-lg">Ir al Login</a>
+            <a href="../login.php" class="btn btn-primary btn-lg">Ir al Login</a>
         </div>
     <?php endif; ?>
 

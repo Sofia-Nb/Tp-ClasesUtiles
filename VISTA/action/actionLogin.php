@@ -45,14 +45,15 @@ if ($usuario) {
     </div>
 
     <br>
-    <a href="javascript:history.back()" class="btn btn-outline-primary w-100 mt-3">Volver</a>
+    <div style="text-align: center;">
+    <a href="javascript:history.back()" class="btn btn-outline-primary w-50">Volver</a>
+    </div>
 </div>
         <?php
     } else if ($usuario['rol'] == 'profe') {
         ?>
         <div class="container">
         <div class="row">
-        <div class="col-md-6">
         <div class="container align-items-center" style="min-height: 70vh;">
             <h2 class="text-center mb-4">Cargar Nota</h2>
 
@@ -80,8 +81,7 @@ if ($usuario) {
                 <button type="submit" class="btn btn-success w-100">Cargar Nota</button>
             </form>
         </div>
-        </div>
-        <div class="col-md-6">
+        <hr>
         <div class="container align-items-center" style="min-height: 70vh;">
             <h2 class="text-center mb-4">Alumnos y permisos</h2>
 
@@ -92,8 +92,6 @@ if ($usuario) {
                             <th>Nombre Completo</th>
                             <th>Email</th>
                             <th>Legajo</th>
-                            <th>Acción</th>
-                            <th>Notas</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -105,8 +103,26 @@ if ($usuario) {
                                 <td>{$usuario->getNombreCompleto()}</td>
                                 <td>{$usuario->getEmail()}</td>
                                 <td>{$objAbmAlumno->alumnoLegajo($alumno->getIdUsuario())}</td>
-                                <td><button type='button' class='btn btn-outline-secondary btn-sm'>Mostrar/Encriptar</button></td>
-                                <td><a class='btn btn-outline-dark btn-sm'>Notas</a></td>
+                              </tr>";
+                    }
+                    ?>
+                    </tbody>
+                </table>
+                <table class="table table-striped table-bordered text-center" height="20">
+                        <tr>
+                            <th>Notas</th>
+                            <th>acción</th>
+                        </tr>
+                    <tbody>
+                    <?php
+                    foreach ($alumnos as $alumno) {
+                        $usuario = $objAbmUsuario->obtenerUsuarioId($alumno->getIdUsuario());
+                        echo "<tr>
+                                <td>NOTA 1</td>
+                                <td>
+                                <button type='button' class='btn btn-outline-secondary btn-sm'>Encriptar</button>
+                                <button type='button' class='btn btn-outline-secondary btn-sm'>Mostrar</button>
+                                </td>
                               </tr>";
                     }
                     ?>
@@ -115,9 +131,10 @@ if ($usuario) {
         </div>
         </div>
         </div>
-        </div>
      <br>
-    <a href="javascript:history.back()" class="btn btn-outline-primary w-100">Volver</a>
+     <div style="text-align: center;">
+     <a href="javascript:history.back()" class="btn btn-outline-primary w-50">Volver</a>
+     </div>
         <?php
     }
     // En el caso de haber un admin
