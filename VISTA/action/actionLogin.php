@@ -1,6 +1,7 @@
 <?php
 include_once '../structure/header.php';
 $datos = datasubmitted();
+$objAbmNotas = new abmNota();
 $objAbmUsuario = new abmUsuario();
 $objAbmAlumno = new abmAlumno();
 $alumnos = $objAbmAlumno->buscarAlumnos('alumno');
