@@ -2,9 +2,10 @@
 include_once '../structure/header.php';
 $datos = datasubmitted();
 $objAbmNotas = new abmNota();
-$resultado = $objAbmNotas->encriptarNota($datos);
+$resultado = $objAbmNotas->agregarNota($datos);
 
-if ($resultado) { 
+if ($resultado) { // si la nota existe
+    $objAbmNotas->encriptarNota($datos); // se encripta la nota
     ?>
     <div class='container text-center mt-5'>
             <div class='alert alert-success'>

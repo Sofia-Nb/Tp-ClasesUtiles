@@ -52,6 +52,37 @@ class Nota {
         $this->idProfe_FK = $idProfesor; 
     }
 
+    public function insertarNota($datos) {
+    $resultado = false;
+    $usuario = new Usuario($datos);
+
+    // Buscar IDs del alumno y profesor
+    $idAlumno = $usuario->buscarDni($datos['dniAlumno']);
+    $idProfesor = $usuario->buscarDni($datos['dniProfesor']);
+
+    if ($idAlumno && $idProfesor) {
+        $valorNota = $datos['valorNota'];
+        $fechaNota = $datos['fechaNota'] ?? date('Y-m-d'); // si no viene, usar fecha actual
+
+        $base = new BaseDatos();
+        $sql = "INSERT INTO nota (valor, fecha, idAlumno_FK, idProfe_FK) 
+                VALUES (:valor, :fecha, :idAlumno, :idProfesor)";
+        $stmt = $base->prepare($sql);
+
+        if ($stmt->execute([
+            ':valor' => $valorNota,
+            ':fecha' => $fechaNota,
+            ':idAlumno' => $idAlumno,
+            ':idProfesor' => $idProfesor
+        ])){
+        $resultado = true;
+        }
+    }
+
+    return $resultado;
+}
+
+
     public function encriptarUnaNota($datos) { // Encripta una sola nota
     $resultado = false;
     $usuario = new Usuario($datos);
