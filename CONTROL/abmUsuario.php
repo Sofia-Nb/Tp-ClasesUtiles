@@ -12,4 +12,10 @@ class abmUsuario{
         $objUsuario = new Usuario();
         $objUsuario->agregarUsuario($datos);
      }
+
+     public function obtenerUsuarioId($id){
+        $objUsuario = new Usuario();
+        $usuario = $objUsuario->buscarUsuarioId($id);
+        return $usuario;
+     }
 }

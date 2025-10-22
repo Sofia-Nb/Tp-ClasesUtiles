@@ -9,9 +9,19 @@ class Usuario {
     private $contrasenia; 
     private $rol;
 
-    public function __construct($datos = []) {
-        if (count($datos)) {
-            $this->cargarDatos($datos);
+    public function __construct($idUsuario = null, $dni = null, $email = null, $nombre = null, $apellido = null, $contrasenia = null, $rol = null) {
+        // Si el primer parámetro es un array, usamos cargarDatos
+        if (is_array($idUsuario)) {
+            $this->cargarDatos($idUsuario);
+        } else {
+            // Si no es array, asignamos directamente
+            $this->idUsuario = $idUsuario;
+            $this->dni = $dni;
+            $this->email = $email;
+            $this->nombre = $nombre;
+            $this->apellido = $apellido;
+            $this->contrasenia = $contrasenia;
+            $this->rol = $rol;
         }
     }
 
@@ -43,13 +53,33 @@ class Usuario {
         return $this->rol;
     }
 
-  
+
+    public function setIdUsuario($idUsuario) {
+        $this->idUsuario = $idUsuario;
+    }
+
+    public function setDni($dni) {
+        $this->dni = $dni;
+    }
+
     public function setEmail($email) {
         $this->email = $email;
     }
 
+    public function setNombre($nombre) {
+        $this->nombre = $nombre;
+    }
+
+    public function setApellido($apellido) {
+        $this->apellido = $apellido;
+    }
+
     public function setContrasenia($nuevoHash) {
         $this->contrasenia = $nuevoHash;
+    }
+
+    public function setRol($rol) {
+        $this->rol = $rol;
     }
 
     public function agregarUsuario($datos){
@@ -111,7 +141,7 @@ class Usuario {
         return $res;
     }
 
-    public function buscarId($dni) {
+    public function buscarDni($dni) {
         $baseDatos = new BaseDatos();
         $res = false;
         $sql = "SELECT idUsuario FROM usuario WHERE dni = :dni";
@@ -122,6 +152,48 @@ class Usuario {
             $res = $usuario['idUsuario'];
         }
         return $res;
+    }
+
+    public function buscarUsuarioId($id) {
+    $baseDatos = new BaseDatos();
+    $sql = "SELECT * FROM usuario WHERE idUsuario = :id";
+    $stmt = $baseDatos->prepare($sql);
+    $stmt->execute([':id' => $id]);
+    $usuarioData = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($usuarioData) {
+        // Crear un objeto Usuario y cargarle los datos
+        $objUsuario = new Usuario();
+        $objUsuario->setIdUsuario($usuarioData['idUsuario']);
+        $objUsuario->setDni($usuarioData['dni']);
+        $objUsuario->setEmail($usuarioData['email']);
+        $objUsuario->setNombre($usuarioData['nombre']);
+        $objUsuario->setApellido($usuarioData['apellido']);
+        $objUsuario->setContrasenia($usuarioData['contrasenia']);
+        $objUsuario->setRol($usuarioData['rol']);
+
+        return $objUsuario;
+    }
+
+    return false; 
+}
+
+ public function buscarPorRol($rol) {
+        $base = new BaseDatos();
+        $sql = "SELECT * FROM usuario WHERE rol = '$rol'";
+        $cant = $base->Ejecutar($sql);
+
+        $arreglo = [];
+        if ($cant > 0) {
+            while ($fila = $base->Registro()) {
+                $obj = new Alumno();
+                $obj->cargarDatos($fila);
+                $arreglo[] = $obj;
+            }
+            return $arreglo;
+        } else {
+            return null;
+        }
     }
 
 }

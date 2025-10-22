@@ -1,7 +1,7 @@
 <?php
 require_once('Usuario.php'); 
 
-class Profe extends Usuario {
+class Profesor extends Usuario {
     private $nombreMateria;
 
     public function __construct($datos = [], $nombreMateria = null) {
