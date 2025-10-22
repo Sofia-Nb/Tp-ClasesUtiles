@@ -9,7 +9,6 @@ if ($resultado) {
     <div class='container text-center mt-5'>
             <div class='alert alert-success'>
                 <h4>Nota cargada correctamente</h4>
-                <p>La nota se ha registrado en el sistema</p>
                 <a href='javascript:history.back()' class='btn btn-outline-primary mt-3'>Volver</a>
             </div>
         </div>
