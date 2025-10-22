@@ -106,7 +106,7 @@ if ($usuario) {
                                 <td>{$usuario->getEmail()}</td>
                                 <td>{$objAbmAlumno->alumnoLegajo($alumno->getIdUsuario())}</td>
                                 <td><button type='button' class='btn btn-outline-secondary btn-sm'>Mostrar/Encriptar</button></td>
-                                <td><a href='' class='btn btn-outline-dark btn-sm'>Notas</a></td>
+                                <td><a class='btn btn-outline-dark btn-sm'>Notas</a></td>
                               </tr>";
                     }
                     ?>

@@ -1,8 +1,8 @@
 <?php
 include_once '../structure/header.php';
 $datos = datasubmitted();
-$objAmbProfesor = new abmProfesor();
-$resultado = $objAmbProfesor->encriptarNotas($datos);
+$objAbmNotas = new abmNota();
+$resultado = $objAbmNotas->encriptarNota($datos);
 
 if ($resultado) { 
     ?>
