@@ -164,7 +164,7 @@ public function encriptarTodasNotas($idAlumno) {
         $notasDesencriptadas[] = $notaDesencriptada;
     }
 
-    return $notasDesencriptadas; // retorna array de notas desencriptadas
+    return $notasDesencriptadas;
 }
 
 
@@ -195,5 +195,41 @@ public function desencriptarUnaNota($datos) { // Una sola nota (depende del alum
     }
 
     return $resultado;
+}
+
+public function obtenerPromedioPorMes($idAlumno) {
+    $base = new BaseDatos();
+    $mesNotas = [];
+    $promedio = [];
+    $notasDesencriptadas = [];
+
+    $sql = "SELECT MONTH(fecha) as mes, valor as nota
+            FROM nota 
+            WHERE idAlumno_FK = :idAlumno";
+    $stmt = $base->prepare($sql);
+    $stmt->execute([':idAlumno' => $idAlumno]);
+    $mesValor = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $encriptador = new Encriptador("1234567890abcdefghijklmnopqrstuv");
+    foreach ($mesValor as $i => $fila) {
+        $mesValor[$i]['nota'] = $encriptador->desencriptar($fila['nota']);
+    }
+
+    foreach ($mesValor as $fila) {
+        $mes = $fila['mes'];
+        $nota = $fila['nota'];
+
+        if (!isset($mesNotas[$mes])) {
+            $mesNotas[$mes] = [];
+        }
+
+        $mesNotas[$mes][] = $nota;
+
+    }
+
+    foreach ($mesNotas as $mes => $notas) {
+        $promedio[$mes] = array_sum($notas) / count($notas);
+    }
+    return $promedio;
 }
 }
