@@ -5,8 +5,8 @@ require_once '../../vendor/mitoteam/jpgraph/src/lib/jpgraph.php';
 require_once '../../vendor/mitoteam/jpgraph/src/lib/jpgraph_bar.php';
 
 $usuarioId = $usuario['idUsuario'];
-$notaObj = new Nota();
-$notasArray = $notaObj->obtenerPromedioPorMes($usuarioId); 
+$notaObj = new abmNota();
+$notasArray = $notaObj->promedio($usuarioId); 
 
 $promediosMeses = [];
 for ($m = 1; $m <= 12; $m++) {
