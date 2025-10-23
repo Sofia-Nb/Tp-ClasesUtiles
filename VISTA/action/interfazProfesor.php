@@ -84,6 +84,5 @@ include_once '../structure/header.php';
      <div style="text-align: center;">
      <a href="javascript:history.back()" class="btn btn-outline-primary w-50">Volver</a>
      </div>
-     <script src="../js/nota.js"></script>
-<?php include_once '../structure/footer.php'; ?>
+     <?php include_once '../structure/footer.php'; ?>
 <script src="../js/nota.js"></script>

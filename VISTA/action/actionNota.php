@@ -4,8 +4,7 @@ $datos = datasubmitted();
 $objAbmNotas = new abmNota();
 $resultado = $objAbmNotas->agregarNota($datos);
 
-if ($resultado) { // si la nota existe
-    $objAbmNotas->encriptarNota($datos); // se encripta la nota
+if ($resultado) {
     ?>
     <div class='container text-center mt-5'>
             <div class='alert alert-success'>

@@ -6,14 +6,12 @@ class Nota {
     private $idAlumno_FK; 
     private $idProfe_FK; 
 
-    // Constructor opcional
     public function __construct($datos = []) {
         if (!empty($datos)) {
             $this->cargarDatos($datos);
         }
     }
 
-    // Cargar datos en el objeto
     public function cargarDatos($datos) {
         $this->idNota = $datos['idNota'] ?? null;
         $this->valor = $datos['valor'] ?? null;
@@ -52,11 +50,10 @@ class Nota {
         $this->idProfe_FK = $idProfesor; 
     }
 
-    public function insertarNota($datos) {
+public function insertarNota($datos) {
     $resultado = false;
     $usuario = new Usuario($datos);
 
-    // Buscar IDs del alumno y profesor
     $idAlumno = $usuario->buscarDni($datos['dniAlumno']);
     $idProfesor = $usuario->buscarDni($datos['dniProfesor']);
 
@@ -64,52 +61,23 @@ class Nota {
         $valorNota = $datos['valorNota'];
         $fechaNota = $datos['fechaNota'] ?? date('Y-m-d'); // si no viene, usar fecha actual
 
+        // encriptar la nota antes de insertarla
+        $encriptador = new Encriptador("1234567890abcdefghijklmnopqrstuv");
+        $valorNotaEncriptada = $encriptador->encriptar($valorNota);
+
         $base = new BaseDatos();
         $sql = "INSERT INTO nota (valor, fecha, idAlumno_FK, idProfe_FK) 
                 VALUES (:valor, :fecha, :idAlumno, :idProfesor)";
         $stmt = $base->prepare($sql);
 
         if ($stmt->execute([
-            ':valor' => $valorNota,
+            ':valor' => $valorNotaEncriptada,
             ':fecha' => $fechaNota,
             ':idAlumno' => $idAlumno,
             ':idProfesor' => $idProfesor
-        ])){
-        $resultado = true;
+        ])) {
+            $resultado = true;
         }
-    }
-
-    return $resultado;
-}
-
-
-    public function encriptarUnaNota($datos) { // Encripta una sola nota
-    $resultado = false;
-    $usuario = new Usuario($datos);
-
-    // Buscar IDs
-    $idAlumno = $usuario->buscarDni($datos['dniAlumno']);
-    $idProfesor = $usuario->buscarDni($datos['dniProfesor']);
-
-    if ($idAlumno && $idProfesor) {
-        $encriptador = new Encriptador("1234567890abcdefghijklmnopqrstuv");
-
-        // Encriptar el valor de la nota
-        $notaEncriptada = $encriptador->encriptar($datos['valorNota']);
-
-        // Actualizar la nota existente
-        $base = new BaseDatos();
-        $sql = "UPDATE nota 
-                SET valor = :valor 
-                WHERE idAlumno_FK = :idAlumno 
-                AND idProfe_FK = :idProfesor";
-
-        $stmt = $base->prepare($sql);
-        $resultado = $stmt->execute([
-            ':valor' => $notaEncriptada,
-            ':idAlumno' => $idAlumno,
-            ':idProfesor' => $idProfesor
-        ]);
     }
 
     return $resultado;
@@ -130,7 +98,6 @@ public function encriptarTodasNotas($idAlumno) {
         $stmtUpdate = $base->prepare($sqlUpdate);
 
         foreach ($notas as $fila) {
-            // Evita doble encriptación
             $valor = $fila['valor'];
             if (!$this->esTextoEncriptado($valor)) {
                 $notaEncriptada = $encriptador->encriptar($valor);
@@ -201,7 +168,6 @@ public function obtenerPromedioPorMes($idAlumno) {
     $base = new BaseDatos();
     $mesNotas = [];
     $promedio = [];
-    $notasDesencriptadas = [];
 
     $sql = "SELECT MONTH(fecha) as mes, valor as nota
             FROM nota 
@@ -211,8 +177,10 @@ public function obtenerPromedioPorMes($idAlumno) {
     $mesValor = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     $encriptador = new Encriptador("1234567890abcdefghijklmnopqrstuv");
+
     foreach ($mesValor as $i => $fila) {
-        $mesValor[$i]['nota'] = $encriptador->desencriptar($fila['nota']);
+        $notaDesencriptada = $encriptador->desencriptar($fila['nota']);
+        $mesValor[$i]['nota'] = $notaDesencriptada;
     }
 
     foreach ($mesValor as $fila) {
@@ -224,12 +192,14 @@ public function obtenerPromedioPorMes($idAlumno) {
         }
 
         $mesNotas[$mes][] = $nota;
-
     }
 
     foreach ($mesNotas as $mes => $notas) {
-        $promedio[$mes] = array_sum($notas) / count($notas);
+        $promedioMes = array_sum($notas) / count($notas);
+        $promedio[$mes] = $promedioMes;
     }
+
     return $promedio;
 }
+
 }

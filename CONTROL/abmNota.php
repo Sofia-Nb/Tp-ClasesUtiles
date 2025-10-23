@@ -7,11 +7,5 @@ class abmNota {
         $resultado = $objNota->insertarNota($datos);
         return $resultado;
     }
-
-    public function encriptarNota($datos){
-        $objNota = new Nota();
-        $res = $objNota->encriptarUnaNota($datos);
-        return $res;
-    }
 }
     
